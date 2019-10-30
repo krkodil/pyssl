@@ -1,2 +1,2 @@
 # pyssl
-ECHO Server with SSL Verification
+Client/Server with SSL Verification
