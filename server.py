@@ -1,8 +1,8 @@
 import socket
 import ssl
 
-HOST = '127.0.0.1'
-PORT = 1234
+HOST = 'localhost'
+PORT = 10443
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -27,7 +27,7 @@ print(cert)
 
 # verify client
 if not cert or ('organizationName', 'Test') not in cert['subject'][3]:
-    raise Exception("ERROR")
+    raise Exception("Client cert not match!")
 
 try:
     data = secure_sock.read(1024)

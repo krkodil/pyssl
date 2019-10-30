@@ -1,8 +1,8 @@
 import socket
 import ssl
 
-HOST = '127.0.0.1'
-PORT = 1234
+HOST = 'localhost'
+PORT = 10443
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setblocking(True)
@@ -22,8 +22,8 @@ cert = secure_sock.getpeercert()
 print(cert)
 
 # verify server
-if not cert or ('organizationName', 'Test') not in cert['subject'][3]:
-    raise Exception("ERROR")
+if not cert or ('commonName', HOST) not in cert['subject'][5]:
+    raise Exception("Server cert not match!")
 
 secure_sock.write(b'Hello!')
 
