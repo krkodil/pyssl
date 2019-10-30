@@ -9,7 +9,7 @@ server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind((HOST, PORT))
 server_socket.listen(10)
 
-client, fromaddr = server_socket.accept()
+client, address = server_socket.accept()
 secure_sock = ssl.wrap_socket(client,
                               server_side=True,
                               ca_certs="keys/clients.pem",
