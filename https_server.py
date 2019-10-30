@@ -6,7 +6,6 @@ PORT = 443
 
 
 class Cert:
-
     def __init__(self, crt):
         self.subject = dict([x[0] for x in crt.get('subject')])
         self.issuer = dict([x[0] for x in crt.get('issuer')])
