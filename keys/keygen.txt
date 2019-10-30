@@ -1,0 +1,19 @@
+# Self signed root CA cert
+openssl req -nodes -x509 -newkey rsa:2048 -keyout ca.key -out ca.crt -subj "/C=US/ST=NY/L=Boston/O=Test/OU=root/CN=localhost"
+
+# Server cert
+openssl req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/C=US/ST=NY/L=Boston/O=Test/OU=server/CN=localhost"
+# Signed server cert
+openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
+
+# Clients cert
+openssl req -nodes -newkey rsa:2048 -keyout client1.key -out client1.csr -subj "/C=US/ST=NY/L=Boston/O=Test/OU=client1/CN=localhost"
+openssl req -nodes -newkey rsa:2048 -keyout client2.key -out client2.csr -subj "/C=US/ST=NY/L=Boston/O=Test/OU=client2/CN=localhost"
+
+# Sign the clients
+openssl x509 -req -in client1.csr -CA ca.crt -CAkey ca.key -CAserial ca.srl -out client1.crt
+openssl x509 -req -in client2.csr -CA ca.crt -CAkey ca.key -CAserial ca.srl -out client2.crt
+
+# Concat PEM
+type client1.key client1.crt client2.key client2.crt  ca.crt ca.crt > clients.pem
+type server.key server.crt ca.crt ca.crt > server.pem
