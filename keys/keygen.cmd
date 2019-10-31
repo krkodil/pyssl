@@ -1,27 +1,26 @@
-# Initial clean up
+@ echo off
+
+rem ---- Initial clean up
 del *.key
 del *.crt
-del *.pem
-del *.csr
-del *.srl
 
 set openssl=C:\OpenSSL\bin\openssl.exe
 
-# Self signed root CA cert
-%openssl% req -nodes -x509 -newkey rsa:2048 -keyout ca.key -out ca.crt -subj "/C=US/ST=NY/L=Boston/O=Test/OU=root/CN=localhost" -days 365
+rem ---- Self signed root CA cert
+%openssl% req -nodes -x509 -newkey rsa:2048 -keyout ca.key -out ca.crt -subj "/C=US/ST=NY/L=Boston/O=Python/OU=root/CN=localhost" -days 365
 
-#  Server cert
-%openssl% req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/C=US/ST=NY/L=Boston/O=Test/OU=server/CN=localhost"
-#  Signed server cert
+rem ----  Server cert
+%openssl% req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj "/C=US/ST=NY/L=Boston/O=Python/OU=server/CN=localhost"
+rem ----  Signed server cert
 %openssl% x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 365
 
-# Clients cert
-%openssl% req -nodes -newkey rsa:2048 -keyout client.key -out client.csr -subj "/C=US/ST=NY/L=Boston/O=Test/OU=Sales/CN=localhost"
+rem ---- Clients cert
+%openssl% req -nodes -newkey rsa:2048 -keyout client.key -out client.csr -subj "/C=US/ST=NY/L=Boston/O=Python/OU=client/CN=localhost"
 
-# Sign the clients
+rem ---- Sign the clients
 %openssl% x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAserial ca.srl -out client.crt -days 365
 
-# Post clean up
+rem ---- Post clean up
 del *.csr
 del *.srl
 del ca.key
