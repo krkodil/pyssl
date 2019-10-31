@@ -25,7 +25,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         cert = self.get_client_cert()
         cipher = self.connection.cipher()
-
+        self.connection
         self.send_response(200)
         self.end_headers()
         response = 'GET {} {}, server: {}, system: {}, cipher: {}, cert: {}'.format(
@@ -38,7 +38,7 @@ httpd = HTTPServer((HOST, PORT), SimpleHTTPRequestHandler)
 
 httpd.socket = ssl.wrap_socket(httpd.socket,
                                server_side=True,
-                               ca_certs="keys/clients.pem",
+                               ca_certs="keys/ca.crt",
                                certfile="keys/server.crt",
                                keyfile="keys/server.key",
                                cert_reqs=ssl.CERT_REQUIRED,

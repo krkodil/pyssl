@@ -10,8 +10,8 @@ sock.connect((HOST, PORT))
 
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.verify_mode = ssl.CERT_REQUIRED
-context.load_verify_locations('keys/server.pem')
-context.load_cert_chain(certfile="keys/client1.crt", keyfile="keys/client1.key")
+context.load_verify_locations('keys/ca.crt')
+context.load_cert_chain(certfile="keys/client.crt", keyfile="keys/client.key")
 
 secure_sock = context.wrap_socket(sock, server_hostname=HOST)   # Set HOST for SNI verification
 # cert = secure_sock.getpeercert()

@@ -6,8 +6,8 @@ PORT = 443
 
 context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
 context.verify_mode = ssl.CERT_REQUIRED
-context.load_verify_locations('keys/server.pem')
-context.load_cert_chain(certfile='keys/client1.crt', keyfile='keys/client1.key')
+context.load_verify_locations('keys/ca.crt')
+context.load_cert_chain(certfile='keys/client.crt', keyfile='keys/client.key')
 
 connection = http.client.HTTPSConnection(HOST, PORT, context=context)
 

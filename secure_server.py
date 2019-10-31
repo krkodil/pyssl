@@ -32,29 +32,32 @@ def client_thread(client, client_ip):
 def server_thread(server):
     while True:
         client, address = server.accept()
-        print('Accepted connection from {}:{}'.format(address[0], address[1]))
-        secure_sock = ssl.wrap_socket(client,
-                                      server_side=True,
-                                      ca_certs="keys/clients.pem",
-                                      certfile="keys/server.crt",
-                                      keyfile="keys/server.key",
-                                      cert_reqs=ssl.CERT_REQUIRED,
-                                      ssl_version=ssl.PROTOCOL_TLSv1_2)
-
-        print(secure_sock.cipher())
-
-        cert = Cert(secure_sock.getpeercert())
-        print(cert.subject)
-        start_new_thread(client_thread, (secure_sock, address[0]))
+        cipher = client.cipher()
+        cert = Cert(client.getpeercert())
+        print("Accepted connection from {}:{}, Peer: {}, Cipher: {}, {} {}bit".format(
+            address[0], address[1],
+            cert.subject.get("organizationalUnitName"),
+            cipher[0],
+            cipher[1],
+            cipher[2])
+        )
+        start_new_thread(client_thread, (client, address[0]))
 
 
 if __name__ == "__main__":
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_socket.bind((HOST, PORT))
-    server_socket.listen(10)
+    ssl_server = ssl.wrap_socket(server_socket,
+                                 server_side=True,
+                                 ca_certs="keys/ca.crt",
+                                 certfile="keys/server.crt",
+                                 keyfile="keys/server.key",
+                                 cert_reqs=ssl.CERT_REQUIRED,
+                                 ssl_version=ssl.PROTOCOL_TLSv1_2)
 
-    start_new_thread(server_thread, (server_socket, ))
+    ssl_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    ssl_server.bind((HOST, PORT))
+    ssl_server.listen(10)
 
-    input("Server running on port {} ...\n\n".format(PORT))
+    start_new_thread(server_thread, (ssl_server,))
 
+    input("Server running on port {}\nPress Enter to terminate ...\n".format(PORT))
