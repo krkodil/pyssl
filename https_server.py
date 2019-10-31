@@ -25,7 +25,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         cert = self.get_client_cert()
         cipher = self.connection.cipher()
-        self.connection
         self.send_response(200)
         self.end_headers()
         response = 'GET {} {}, server: {}, system: {}, cipher: {}, cert: {}'.format(
