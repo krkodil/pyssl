@@ -14,9 +14,8 @@ context.load_verify_locations('keys/server.pem')
 context.load_cert_chain(certfile="keys/client1.crt", keyfile="keys/client1.key")
 
 secure_sock = context.wrap_socket(sock, server_hostname=HOST)   # Set HOST for SNI verification
-
-cert = secure_sock.getpeercert()
-print(cert)
+# cert = secure_sock.getpeercert()
+# print(cert)
 
 secure_sock.write(b'Hello!')
 
