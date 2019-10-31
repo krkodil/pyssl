@@ -24,11 +24,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         cert = self.get_client_cert()
+        cipher = self.connection.cipher()
 
         self.send_response(200)
         self.end_headers()
-        response = 'GET {} {}, server: {}, system: {}, cert: {}'.format(
-            self.path, self.protocol_version, self.server_version, self.sys_version, cert.serialNumber)
+        response = 'GET {} {}, server: {}, system: {}, cipher: {}, cert: {}'.format(
+            self.path, self.protocol_version, self.server_version, self.sys_version, cipher, cert.serialNumber)
 
         self.wfile.write(bytearray(response, 'utf-8'))
 

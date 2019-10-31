@@ -18,7 +18,6 @@ secure_sock = ssl.wrap_socket(client,
                               cert_reqs=ssl.CERT_REQUIRED,
                               ssl_version=ssl.PROTOCOL_TLSv1_2)
 
-print(repr(secure_sock.getpeername()))
 print(secure_sock.cipher())
 
 cert = secure_sock.getpeercert()
